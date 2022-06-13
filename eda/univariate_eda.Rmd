@@ -1,0 +1,116 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+df = read.csv("../data/covertype.csv",
+                sep = ",")
+```
+
+```{r}
+df$Wilderness_Area1 = as.factor(df$Wilderness_Area1)
+df$Wilderness_Area2 = as.factor(df$Wilderness_Area2)
+df$Wilderness_Area3 = as.factor(df$Wilderness_Area3)
+df$Wilderness_Area4 = as.factor(df$Wilderness_Area4)
+df$Cover_Type = as.factor(df$Cover_Type)
+```
+
+```{r}
+str(df)
+```
+
+```{r}
+summary(df)
+```
+### Elevation
+```{r}
+ggplot(data = df, mapping = aes(x = Elevation, fill = Cover_Type)) + geom_density(alpha=0.3)
+```
+
+
+```{r}
+ggplot(data = df, mapping = aes(x = Aspect, fill = Cover_Type)) + geom_density(alpha=0.3)
+```
+
+```{r}
+ggplot(data = df, mapping = aes(x = Slope, fill = Cover_Type)) + geom_density(alpha=0.3)
+```
+
+```{r}
+ggplot(data = df, mapping = aes(x = Horizontal_Distance_To_Hydrology, fill = Cover_Type)) + geom_density(alpha=0.3)
+```
+
+```{r}
+ggplot(data = df, mapping = aes(x = Vertical_Distance_To_Hydrology, fill = Cover_Type)) + geom_density(alpha=0.3)
+```
+
+```{r}
+ggplot(data = df, mapping = aes(x = Horizontal_Distance_To_Roadways, fill = Cover_Type)) + geom_density(alpha=0.3)
+```
+
+```{r}
+ggplot(data = df, mapping = aes(x =  Hillshade_9am, fill = Cover_Type)) + geom_density(alpha=0.3)
+```
+
+```{r}
+ggplot(data = df, mapping = aes(x =  Hillshade_Noon, fill = Cover_Type)) + geom_density(alpha=0.3)
+```
+
+```{r}
+ggplot(data = df, mapping = aes(x =  Hillshade_3pm, fill = Cover_Type)) + geom_density(alpha=0.3)
+```
+
+```{r}
+ggplot(data = df, mapping = aes(x = Horizontal_Distance_To_Fire_Points, fill = Cover_Type)) + geom_density(alpha=0.3)
+```
+
+```{r}
+ggplot(df, aes(x = Wilderness_Area1, fill = Cover_Type)) + geom_bar()
+```
+
+```{r}
+ggplot(df, aes(x = Wilderness_Area2, fill = Cover_Type)) + geom_bar()
+```
+
+```{r}
+ggplot(df, aes(x = Wilderness_Area3, fill = Cover_Type)) + geom_bar()
+```
+
+```{r}
+ggplot(df, aes(x = Wilderness_Area4, fill = Cover_Type)) + geom_bar()
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

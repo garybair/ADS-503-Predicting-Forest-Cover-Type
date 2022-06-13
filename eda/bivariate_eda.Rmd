@@ -1,0 +1,34 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r message=FALSE}
+library(ggplot2)
+library(mlbench)
+library(GGally)
+library(caret)
+library(e1071)
+library(MASS)
+```
+
+```{r}
+df = read.csv("../data/covertype.csv",
+                sep = ",")
+```
+
+```{r}
+df$Wilderness_Area1 = as.factor(df$Wilderness_Area1)
+df$Wilderness_Area2 = as.factor(df$Wilderness_Area2)
+df$Wilderness_Area3 = as.factor(df$Wilderness_Area3)
+df$Wilderness_Area4 = as.factor(df$Wilderness_Area4)
+df$Cover_Type = as.factor(df$Cover_Type)
+```
+
+```{r fig.height=10, fig.width=10}
+ggpairs(df[,1:10])
+```
+
+```{r}
+sapply(df[,1:10], function(x) skewness(x, na.rm = TRUE))
+```
