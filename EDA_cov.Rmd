@@ -1,0 +1,76 @@
+---
+title: "Explortatory Data Analysis"
+output: html_notebook
+---
+
+This notebook contains the exploratory data analysis for the tree cover type data set. EDA will be conducted on some of the predictors that seem important to the classification of a tree cover type.
+
+`Problem Statement`:
+
+Formulate goal as well as purpose of this predictive analytics task. 
+
+```{r}
+library(ggplot2)
+library(dplyr)
+```
+
+```{r}
+df = read.csv('~/Downloads/covtype.csv')
+```
+
+```{r}
+head(df)
+```
+
+
+```{r}
+# distribution of elevation
+ggplot(data = df, aes(x = Elevation)) +
+  geom_histogram(bins = 50)
+```
+
+```{r}
+# distance
+ggplot(data = df, aes(x = Horizontal_Distance_To_Hydrology)) +
+  geom_histogram(bins = 30)
+```
+
+
+```{r}
+
+```
+
+```{r}
+# check cover_types 
+ggplot(data = df, aes(x = Cover_Type)) +
+  geom_bar() +
+  labs(title = 'Cover Types Class Balance')
+```
+`### add to paper:`
+
+After checking the values of the different cover types in the data set, we can assume we have an unbalanced data set. Most of the cover types seen in this data set are Spruce/Fir(1), and Lodgepole Pine(2).
+
+```{r}
+# plot elevation vs covertype
+ggplot(data = df, aes(x = Cover_Type, y = Elevation)) + 
+  geom_point() +
+  labs(title = 'Elevation Vs. Cover Types')
+```
+
+`### add to paper:`
+
+Looking at this scatter plot of cover types and their elevation, we are able to see how the different tree cover types vary in terms of elevation. 
+
+```{r}
+# 
+ggplot(data = df, aes(x = Cover_Type, y = Slope)) + 
+  geom_point()
+```
+
+```{r}
+```
+
+
+```{r}
+```
+
