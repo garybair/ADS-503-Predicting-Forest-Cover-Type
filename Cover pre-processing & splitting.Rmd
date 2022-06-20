@@ -1,0 +1,57 @@
+---
+title: "Untitled"
+author: "Andrew Kim"
+date: "6/19/2022"
+output: html_document
+---
+
+__This notebook contains the data pre-processing and data splitting procedures for the tree cover type data set.__
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(caret)
+set.seed(0)
+```
+
+```{r}
+setwd("C:/Users/andre/OneDrive/Desktop/ADS503")
+```
+
+```{r}
+df = read.csv("C:/Users/andre/OneDrive/Desktop/ADS503/covtype.csv")
+head(df)
+```
+
+```{r}
+str(df)
+```
+
+```{r}
+# Remove features/predictors with no variance
+zero_cols <- nearZeroVar(df)
+Zero_covtype <- df[, -zero_cols]
+```
+
+```{r}
+# Remvove highly correlated predictors
+Covtype_HC <- findCorrelation(cor(Zero_covtype), cutoff = .8)
+CovType <- Zero_covtype[, -Covtype_HC]
+```
+
+
+```{r}
+# Split the data into 80% and 20%.
+cov_train <- createDataPartition(zero_cols, p = .8, list = FALSE)
+covtype_train <- CovType[cov_train, ]
+covtype_test <- CovType[-cov_train, ]
+```
+
+
+
+
+
+
+
+
+
