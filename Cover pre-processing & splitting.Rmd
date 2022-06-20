@@ -47,6 +47,17 @@ covtype_train <- CovType[cov_train, ]
 covtype_test <- CovType[-cov_train, ]
 ```
 
+```{r}
+```
+
+```{r}
+```
+
+```{r}
+```
+
+```{r}
+```
 
 
 
