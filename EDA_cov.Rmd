@@ -12,6 +12,7 @@ Formulate goal as well as purpose of this predictive analytics task.
 ```{r}
 library(ggplot2)
 library(dplyr)
+library(corrplot)
 ```
 
 ```{r}
@@ -22,6 +23,10 @@ df = read.csv('~/Downloads/covtype.csv')
 head(df)
 ```
 
+```{r}
+# add statistics here
+summary(df)
+```
 
 ```{r}
 # distribution of elevation
@@ -66,11 +71,17 @@ Looking at this scatter plot of cover types and their elevation, we are able to 
 ggplot(data = df, aes(x = Cover_Type, y = Slope)) + 
   geom_point()
 ```
-
 ```{r}
+# contingeny table
 ```
 
 
+Which predictors are highly correlated with cover type?
+
+We can check which predictors have a greater effect on classifying cover type based on their correlations to the target variable.
+
 ```{r}
+# correlation heatmap
+heatmap(df)
 ```
 
