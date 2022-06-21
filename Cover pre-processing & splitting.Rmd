@@ -15,10 +15,6 @@ set.seed(0)
 ```
 
 ```{r}
-setwd("C:/Users/andre/OneDrive/Desktop/ADS503")
-```
-
-```{r}
 df = read.csv("C:/Users/andre/OneDrive/Desktop/ADS503/covtype.csv")
 head(df)
 ```
