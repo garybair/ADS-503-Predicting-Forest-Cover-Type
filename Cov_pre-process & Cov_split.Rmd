@@ -60,13 +60,13 @@ head(Cov_transformed)
 ```
 
 ```{r}
-# Find the predictors that are highly correlated within the dataset
+# Find the predictors with no variance
 zero_cols <- nearZeroVar(Cov_transformed)
 colnames(Cov_transformed[zero_cols])
 ```
 
 ```{r}
-# Eliminate the highly correlated predictors from further consideration
+# Eliminate the predictors with no variance from further consideration
 Covtype <- Cov_transformed[, -zero_cols]
 Covtype
 ```
