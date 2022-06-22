@@ -11,6 +11,7 @@ __This notebook contains the data splitting procedure for the tree cover type da
 library(ggplot2)
 library(dplyr)
 library(caret)
+library(AppliedPredictiveModeling)
 set.seed(0)
 ```
 
@@ -28,7 +29,6 @@ summary(df)
 ```
 
 ```{r}
-# Pre-processing the data
 # Count the number of NA's in each feature
 apply(df, 2, function(x){sum(is.na(x))})
 ```
@@ -36,23 +36,48 @@ apply(df, 2, function(x){sum(is.na(x))})
 __There are no missing (NA) values in each feature.__
 
 ```{r}
-# Find and search for categorical variables/features that possess no variance
-zero_cols <- nearZeroVar(df)
-colnames(df[zero_cols])
+# Check for predictors that are highly correlated
+correlations <- cor(df)
+dim(df)
+```
 
-# Remove variables/features with no variance
-Covtype <- df[, -zero_cols]
+```{r}
+library(corrplot)
+corrplot(correlations)
+```
+
+Results 0?
+
+```{r}
+# Pre-process the data
+library(caret)
+Cov_type <- preProcess(df, method = c("center", "scale"))
+Cov_type
+```
+
+```{r}
+# Apply the transformations to the original dataset
+Cov_transformed <- predict(Cov_type, df)
+head(Cov_transformed)
+```
+
+```{r}
+# Find and eliminate highly correlated predictors from further consideration.
+zero_cols <- nearZeroVar(Cov_transformed)
+colnames(Cov_transformed[zero_cols])
+```
+
+```{r}
+Covtype <- Cov_transformed[, -zero_cols]
 Covtype
 ```
 
 ```{r}
-# Convert the Cover_type variable into a factor variable. This will generate this variable into seven levels.
 Covtype$Cover_Type <- as.factor(Covtype$Cover_Type)
 str(Covtype)
 ```
 
 ```{r}
-# Data splitting
 # Split the data into training and testing sets (80% and 20%).
 ctraining <- createDataPartition(Covtype$Cover, p = 0.8, list = FALSE)
 
