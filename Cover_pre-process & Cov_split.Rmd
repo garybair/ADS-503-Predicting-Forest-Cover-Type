@@ -28,12 +28,6 @@ summary(df)
 ```
 
 ```{r}
-# Assess the predictors with high correlation
-# correlation heatmap
-heatmap(df)
-```
-
-```{r}
 # Remove features/predictors with no variance
 zero_cols <- nearZeroVar(df)
 Zero_covtype <- df[, -zero_cols]
