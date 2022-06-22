@@ -34,6 +34,7 @@ Zero_covtype <- df[, -zero_cols]
 ```
 
 ```{r}
+# Convert the Cover_type variable into a factor variable. This will generate this variable into seven levels.
 Covtype$Cover_Type <- as.factor(Covtype$Cover_Type)
 str(Covtype)
 ```
