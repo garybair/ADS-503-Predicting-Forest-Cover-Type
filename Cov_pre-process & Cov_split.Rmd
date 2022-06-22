@@ -28,9 +28,12 @@ summary(df)
 ```
 
 ```{r}
+# Pre-processing the data
 # Count the number of NA's in each feature
 apply(df, 2, function(x){sum(is.na(x))})
 ```
+
+__There are no missing (NA) values in each feature.__
 
 ```{r}
 # Find and search for categorical variables/features that possess no variance
@@ -49,6 +52,7 @@ str(Covtype)
 ```
 
 ```{r}
+# Data splitting
 # Split the data into training and testing sets (80% and 20%).
 ctraining <- createDataPartition(Covtype$Cover, p = 0.8, list = FALSE)
 
