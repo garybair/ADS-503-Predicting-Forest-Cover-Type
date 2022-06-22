@@ -86,7 +86,9 @@ covtype_test <- Covtype[-ctraining, ]
 ```
 
 
+```{r}
 
+```
 
 
 
