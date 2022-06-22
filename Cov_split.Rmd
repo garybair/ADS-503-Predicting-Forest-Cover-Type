@@ -5,7 +5,7 @@ date: "6/19/2022"
 output: html_document
 ---
 
-__This notebook contains the data pre-processing and data splitting procedures for the tree cover type data set.__
+__This notebook contains the data splitting procedure for the tree cover type data set.__
 
 ```{r}
 library(ggplot2)
@@ -34,28 +34,16 @@ Zero_covtype <- df[, -zero_cols]
 ```
 
 ```{r}
-# Remove missing (NA) variables
-Df <- df[!is.na(df)]
+Covtype$Cover_Type <- as.factor(Covtype$Cover_Type)
+str(Covtype)
 ```
 
 ```{r}
 # Split the data into training and testing sets (80% and 20%).
-cov_train <- createDataPartition(df, p = 0.8, list = FALSE)
+ctraining <- createDataPartition(Covtype$Cover, p = 0.8, list = FALSE)
 
-covtype_train <- Covtype[cov_train$Resample1, ]
-covtype_test <- Covtype[-cov_train$Resample1, ]
-```
-
-```{r}
-```
-
-```{r}
-```
-
-```{r}
-```
-
-```{r}
+covtype_train <- Covtype[ctraining, ]
+covtype_test <- Covtype[-ctraining, ]
 ```
 
 
