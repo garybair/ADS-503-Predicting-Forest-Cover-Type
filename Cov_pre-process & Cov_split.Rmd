@@ -46,8 +46,6 @@ library(corrplot)
 corrplot(correlations)
 ```
 
-Results 0?
-
 ```{r}
 # Pre-process the data
 library(caret)
