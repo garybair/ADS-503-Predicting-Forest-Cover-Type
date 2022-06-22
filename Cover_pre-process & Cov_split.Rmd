@@ -24,23 +24,26 @@ str(df)
 ```
 
 ```{r}
+summary(df)
+```
+
+```{r}
 # Remove features/predictors with no variance
 zero_cols <- nearZeroVar(df)
 Zero_covtype <- df[, -zero_cols]
 ```
 
 ```{r}
-# Remvove highly correlated predictors
-Covtype_HC <- findCorrelation(cor(Zero_covtype), cutoff = .8)
-CovType <- Zero_covtype[, -Covtype_HC]
+# Remove missing (NA) variables
+Df <- df[!is.na(df)]
 ```
 
-
 ```{r}
-# Split the data into 80% and 20%.
-cov_train <- createDataPartition(zero_cols, p = .8, list = FALSE)
-covtype_train <- CovType[cov_train, ]
-covtype_test <- CovType[-cov_train, ]
+# Split the data into training and testing sets (80% and 20%).
+cov_train <- createDataPartition(df, p = 0.8, list = FALSE)
+
+covtype_train <- Covtype[cov_train$Resample1, ]
+covtype_test <- Covtype[-cov_train$Resample1, ]
 ```
 
 ```{r}
