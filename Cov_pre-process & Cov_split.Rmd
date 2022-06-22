@@ -62,17 +62,19 @@ head(Cov_transformed)
 ```
 
 ```{r}
-# Find and eliminate highly correlated predictors from further consideration.
+# Find the predictors that are highly correlated within the dataset
 zero_cols <- nearZeroVar(Cov_transformed)
 colnames(Cov_transformed[zero_cols])
 ```
 
 ```{r}
+# Eliminate the highly correlated predictors from further consideration
 Covtype <- Cov_transformed[, -zero_cols]
 Covtype
 ```
 
 ```{r}
+# Convert Cover_Type variable into a factor variable. This will factor the variable to seven categories
 Covtype$Cover_Type <- as.factor(Covtype$Cover_Type)
 str(Covtype)
 ```
