@@ -73,6 +73,9 @@ ggplot(data = df, aes(x = Cover_Type, y = Slope)) +
 ```
 ```{r}
 # contingeny table
+# cover types based on slope
+# explain the meaning of slope 
+#table(df$Slope, df$Cover_Type)
 ```
 
 
@@ -82,6 +85,6 @@ We can check which predictors have a greater effect on classifying cover type ba
 
 ```{r}
 # correlation heatmap
-heatmap(df)
+cor(df)
 ```
 
