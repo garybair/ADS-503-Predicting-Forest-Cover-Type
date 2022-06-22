@@ -1,7 +1,7 @@
 ---
 title: "Untitled"
 author: "Andrew Kim"
-date: "6/19/2022"
+date: "6/21/2022"
 output: html_document
 ---
 
@@ -28,9 +28,18 @@ summary(df)
 ```
 
 ```{r}
-# Remove features/predictors with no variance
+# Count the number of NA's in each feature
+apply(df, 2, function(x){sum(is.na(x))})
+```
+
+```{r}
+# Find and search for categorical variables/features that possess no variance
 zero_cols <- nearZeroVar(df)
-Zero_covtype <- df[, -zero_cols]
+colnames(df[zero_cols])
+
+# Remove variables/features with no variance
+Covtype <- df[, -zero_cols]
+Covtype
 ```
 
 ```{r}
