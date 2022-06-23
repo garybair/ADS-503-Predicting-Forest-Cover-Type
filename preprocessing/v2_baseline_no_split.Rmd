@@ -1,0 +1,76 @@
+---
+title: "v2_baseline_no_resampling"
+author: "Andrew Kim"
+date: "6/19/2022"
+output: html_document
+---
+
+__This notebook contains the data splitting procedure for the tree cover type data set.__
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(caret)
+set.seed(0)
+```
+
+```{r}
+df = read.csv("../data/covertype.csv")
+head(df)
+```
+
+```{r}
+str(df)
+```
+
+```{r}
+summary(df)
+```
+```{r}
+# Checking for missing values
+sum(is.na(df))
+```
+
+
+```{r}
+# Remove features/predictors with no variance
+zero_cols <- nearZeroVar(df)
+print(zero_cols)
+df <- df[, -zero_cols]
+```
+
+```{r}
+# Convert the Cover_type variable into a factor variable. This will generate this variable into seven levels.
+df$Cover_Type <- as.factor(df$Cover_Type)
+str(df)
+```
+
+```{r}
+### checking for high correlations
+df_Cor =  cor(df[,1:9])
+highCors = findCorrelation(df_Cor , cutoff = .75)
+print(highCors)
+df = df[,-highCors]
+```
+```{r}
+# Split the data into training and testing sets (80% and 20%).
+ctraining <- createDataPartition(df$Cover_Type, 
+                                 p = 0.8, 
+                                 list = FALSE)
+
+train <- df[ctraining, ]
+test <- df[-ctraining, ]
+```
+
+```{r}
+### Writing train/test split to csv for modeling
+write.csv(train,"../data/train_no_rebal.csv", row.names = FALSE)
+write.csv(test,"../data/test_no_rebal.csv", row.names = FALSE)
+```
+
+
+
+
+
+
+
