@@ -76,7 +76,44 @@ write.csv(train,"../data/train.csv", row.names = FALSE)
 write.csv(test,"../data/test.csv", row.names = FALSE)
 ```
 
+```{r}
+train = read.table("../data/train.csv", sep = ",", header=TRUE)
+test = read.table("../data/test.csv", sep = ",", header=TRUE)
+```
 
+```{r}
+colnames(train)
+```
+
+```{r}
+# Grouping soil type variables into one group
+library(dplyr)
+soil_group <- train %>%
+  group_by(Soil_Type10, Soil_Type12, Soil_Type22, Soil_Type23, Soil_Type29, 
+           Soil_Type30, Soil_Type32, Soil_Type33) %>%
+  dplyr::summarise(soil_sum = sum(Cover_Type)) %>% 
+  as.data.frame()
+```
+
+```{r}
+# Grouping wilderness area variables into one group
+wilderness_group <- train %>%
+  group_by(Wilderness_Area1, Wilderness_Area2, Wilderness_Area3, Wilderness_Area4) %>%
+  dplyr::summarise(wilderness_sum = sum(Cover_Type)) %>% 
+  as.data.frame()
+```
+
+```{r}
+# Evaluating Euclidean & Manhattan distances of soil types
+dist(soil_group, method = 'euclidean')
+dist(soil_group, method = "manhattan")
+```
+
+```{r}
+# Evaluating Euclidean & Manhattan distances of wilderness areas
+dist(wilderness_group, method = 'euclidean')
+dist(wilderness_group, method = "manhattan")
+```
 
 
 
