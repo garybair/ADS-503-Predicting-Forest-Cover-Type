@@ -16,7 +16,7 @@ set.seed(0)
 ```
 
 ```{r}
-df = read.csv("C:/Users/andre/OneDrive/Desktop/ADS503/covtype.csv")
+df = read.csv("../data/covertype.csv")
 head(df)
 ```
 
@@ -29,66 +29,93 @@ summary(df)
 ```
 
 ```{r}
-# Count the number of NA's in each feature
-apply(df, 2, function(x){sum(is.na(x))})
+# Checking for missing values
+sum(is.na(df))
 ```
-
 __There are no missing (NA) values in each feature.__
 
 ```{r}
-# Check for predictors that are highly correlated
-correlations <- cor(df)
-dim(df)
+# Remove features/predictors with no variance
+zero_cols <- nearZeroVar(df)
+print(zero_cols)
+df <- df[, -zero_cols]
 ```
 
 ```{r}
-library(corrplot)
-corrplot(correlations)
+# Convert the Cover_type variable into a factor variable. This will generate this variable into seven levels.
+df$Cover_Type <- as.factor(df$Cover_Type)
+str(df)
 ```
 
 ```{r}
-# Pre-process the data
-library(caret)
-Cov_type <- preProcess(df, method = c("center", "scale"))
-Cov_type
-```
-
-```{r}
-# Apply the transformations to the original dataset
-Cov_transformed <- predict(Cov_type, df)
-head(Cov_transformed)
-```
-
-```{r}
-# Find the predictors with no variance
-zero_cols <- nearZeroVar(Cov_transformed)
-colnames(Cov_transformed[zero_cols])
-```
-
-```{r}
-# Eliminate the predictors with no variance from further consideration
-Covtype <- Cov_transformed[, -zero_cols]
-Covtype
-```
-
-```{r}
-# Convert Cover_Type variable into a factor variable. This will factor the variable to seven categories
-Covtype$Cover_Type <- as.factor(Covtype$Cover_Type)
-str(Covtype)
+### checking for high correlations
+df_Cor =  cor(df[,1:9])
+highCors = findCorrelation(df_Cor , cutoff = .75)
+print(highCors)
+df = df[,-highCors]
 ```
 
 ```{r}
 # Split the data into training and testing sets (80% and 20%).
-ctraining <- createDataPartition(Covtype$Cover, p = 0.8, list = FALSE)
+ctraining <- createDataPartition(df$Cover_Type, p = 0.8, list = FALSE)
 
-covtype_train <- Covtype[ctraining, ]
-covtype_test <- Covtype[-ctraining, ]
+train <- df[ctraining, ]
+test <- df[-ctraining, ]
 ```
-
 
 ```{r}
-
+### Class rebalancing on training set.
+train <- downSample(x = train[, -ncol(train)], 
+                    y = train$Cover_Type,
+                    yname = "Cover_Type") 
 ```
+
+```{r}
+### Writing train/test split to csv for modeling
+write.csv(train,"../data/train.csv", row.names = FALSE)
+write.csv(test,"../data/test.csv", row.names = FALSE)
+```
+
+```{r}
+train = read.table("../data/train.csv", sep = ",", header=TRUE)
+test = read.table("../data/test.csv", sep = ",", header=TRUE)
+```
+
+```{r}
+colnames(train)
+```
+
+```{r}
+# Grouping soil type variables into one group
+library(dplyr)
+soil_group <- train %>%
+  group_by(Soil_Type10, Soil_Type12, Soil_Type22, Soil_Type23, Soil_Type29, 
+           Soil_Type30, Soil_Type32, Soil_Type33) %>%
+  dplyr::summarise(soil_sum = sum(Cover_Type)) %>% 
+  as.data.frame()
+```
+
+```{r}
+# Grouping wilderness area variables into one group
+wilderness_group <- train %>%
+  group_by(Wilderness_Area1, Wilderness_Area2, Wilderness_Area3, Wilderness_Area4) %>%
+  dplyr::summarise(wilderness_sum = sum(Cover_Type)) %>% 
+  as.data.frame()
+```
+
+```{r}
+# Evaluating Euclidean & Manhattan distances of soil types
+dist(soil_group, method = 'euclidean')
+dist(soil_group, method = "manhattan")
+```
+
+```{r}
+# Evaluating Euclidean & Manhattan distances of wilderness areas
+dist(wilderness_group, method = 'euclidean')
+dist(wilderness_group, method = "manhattan")
+```
+
+
 
 
 
