@@ -1,0 +1,48 @@
+---
+title: "data_wrangling_final"
+date: "6/24/2022"
+output: html_document
+---
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(caret)
+set.seed(0)
+```
+
+```{r}
+df = read.csv("data/covertype.csv")
+head(df)
+```
+
+```{r}
+str(df)
+```
+
+All values are observed to be numerically encoded thus no cleaning is required
+
+```{r}
+summary(df)
+```
+All distributions except Vertical_Distance_To_Hydrology contain expected values. These values may be correct however further validation is required.
+
+```{r}
+df$Cover_Type = as.factor(df$Cover_Type)
+
+ggplot(data = df, mapping = aes(x = Vertical_Distance_To_Hydrology, fill = Cover_Type)) + geom_density(alpha=0.3)
+```
+Observing the actual distributions of Vertical_Distance_To_Hydrology by Cover_Type appears to indicate that there is a defined directionality of measure therefore these values are valid.
+
+```{r}
+# Checking for missing values
+sum(is.na(df))
+```
+
+
+
+
+
+
+
+
