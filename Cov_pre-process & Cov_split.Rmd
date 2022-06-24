@@ -32,7 +32,6 @@ summary(df)
 # Checking for missing values
 sum(is.na(df))
 ```
-__There are no missing (NA) values in each feature.__
 
 ```{r}
 # Remove features/predictors with no variance
@@ -54,6 +53,8 @@ highCors = findCorrelation(df_Cor , cutoff = .75)
 print(highCors)
 df = df[,-highCors]
 ```
+
+__After evaluating and eliminating the predictors with high correlations and no variance, the data is left with 22 variables.__
 
 ```{r}
 # Split the data into training and testing sets (80% and 20%).
