@@ -1,11 +1,11 @@
 ---
-title: "Data pre-processing & Data splitting"
+title: "Data splitting & Data resampling"
 author: "Andrew Kim"
 date: "6/22/2022"
 output: html_document
 ---
 
-__This notebook contains the data splitting procedure for the tree cover type data set.__
+__This notebook contains the data splitting and resampling procedures for the tree cover type data set.__
 
 ```{r}
 library(ggplot2)
@@ -47,14 +47,18 @@ str(df)
 ```
 
 ```{r}
+# Convert the Cover_type variable into a factor variable. This will generate this variable into seven levels.
+df$Cover_Type <- as.factor(df$Cover_Type)
+str(df)
+```
+
+```{r}
 ### checking for high correlations
 df_Cor =  cor(df[,1:9])
 highCors = findCorrelation(df_Cor , cutoff = .75)
 print(highCors)
 df = df[,-highCors]
 ```
-
-__After evaluating and eliminating the predictors with high correlations and no variance, the data is left with 22 variables.__
 
 ```{r}
 # Split the data into training and testing sets (80% and 20%).
@@ -84,6 +88,29 @@ test = read.table("../data/test.csv", sep = ",", header=TRUE)
 
 ```{r}
 colnames(train)
+```
+
+```{r}
+# Resampling
+# Generate info needed for three resampled versions of the training set
+set.seed(100)
+CV_repeatSplit <- createDataPartition(ctraining, p = 0.80, times = 3)
+str(CV_repeatSplit)
+```
+
+```{r}
+set.seed(100)
+Cov_Splits <- createFolds(ctraining, k = 10, returnTrain = TRUE)
+Cov_Splits
+```
+
+```{r}
+Cov_firstrow <- Cov_Splits[[1]]
+```
+
+```{r}
+Cov_cv <- ctraining[Cov_firstrow]
+nrow(ctraining)
 ```
 
 ```{r}
