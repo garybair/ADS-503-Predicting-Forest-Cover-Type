@@ -1,0 +1,65 @@
+---
+title: "data_splitting_resampling_final"
+output: html_notebook
+---
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(caret)
+library(performanceEstimation) ### replaces library DMwR that is now deprecated on R 4.0+
+```
+
+```{r}
+df = read.csv("data/covertype_preprocessed.csv")
+df$Cover_Type <- as.factor(df$Cover_Type)
+```
+
+```{r}
+# Split the data into training and testing sets (80% and 20%).
+set.seed(7)
+ctraining <- createDataPartition(df$Cover_Type, 
+                                 p = 0.8, 
+                                 list = FALSE)
+
+train <- df[ctraining, ]
+test <- df[-ctraining, ]
+```
+
+```{r}
+train %>%count(Cover_Type, sort = TRUE) 
+```
+
+
+```{r}
+### Class downsampling on training set.
+set.seed(7)
+train_down <- downSample(x = train[, -ncol(train)], 
+                         y = train$Cover_Type,
+                         yname = "Cover_Type")
+write.csv(train_down,"data/train_downsample.csv", row.names = FALSE)
+```
+
+```{r}
+### Class upsampling on training set.
+set.seed(7)
+train_up <- upSample(x = train[, -ncol(train)], 
+                     y = train$Cover_Type,
+                     yname = "Cover_Type")
+write.csv(train_up,"data/train_upsample.csv", row.names = FALSE)
+```
+
+```{r}
+### Class smote on training set.
+set.seed(7)
+train_sm <- smote(Cover_Type~.,
+                  data = train,
+                  k = 3,
+                  perc.over = 25)
+write.csv(train_sm,"data/train_smote.csv", row.names = FALSE)
+```
+
+```{r}
+### Writing test split to csv for modeling
+write.csv(test,"data/test.csv", row.names = FALSE)
+```

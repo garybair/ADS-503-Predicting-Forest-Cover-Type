@@ -1,0 +1,125 @@
+---
+title: "preprocessing_final"
+date: "6/24/2022"
+output: html_document
+---
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(GGally)
+library(caret)
+```
+
+```{r}
+df = read.csv("data/covertype.csv")
+head(df)
+df$Cover_Type = as.factor(df$Cover_Type)
+```
+
+
+```{r}
+# Remove features/predictors with no variance
+zero_cols <- nearZeroVar(df)
+head(df[,zero_cols])
+df <- df[, -zero_cols]
+```
+32 features are observed to have degenerate distributions with all features describing Soil_Type.
+
+```{r}
+### checking for high correlations
+df_Cor =  cor(df[,1:9])
+print(df_Cor)
+```
+We observe that Hillshade_9am and Hillshade_3PM observe a negative correlation of -.78. Plotting these reveals
+
+```{r}
+ggpairs(df,
+        columns = 7:9,
+        aes(color = Cover_Type,
+        alpha = 0.5)) 
+```
+Observing the pairplot indicates that the distributions of class labels between Hillshade_9am and Hillshade_3PM are all highly correlated thus removing Hillshade_3PM shouldn't significantly effect predictive performance.
+
+```{r}
+highCors = findCorrelation(df_Cor , cutoff = .75)
+df = df[,-highCors]
+```
+
+```{r}
+### feature creation
+ggpairs(df,
+        columns = c(4:5),
+        aes(color = Cover_Type,
+        alpha = 0.5)) 
+```
+Observing the pairplot correlations indicates that there is a moderate to strong relationship between many of the class labels. When combined with variables importances observed during baseline modeling, these two features are a strong candidate fro feature creation.
+
+```{r}
+df$distance_to_hydrology_euclidean = (df$Horizontal_Distance_To_Hydrology^2 + df$Vertical_Distance_To_Hydrology^2)^(1/2)
+df$distance_to_hydrology_manhattan = (abs(df$Horizontal_Distance_To_Hydrology) + abs(df$Vertical_Distance_To_Hydrology))
+```
+
+```{r}
+ggplot(data = df, mapping = aes(x = distance_to_hydrology_euclidean, fill = Cover_Type)) + geom_density(alpha=0.3)
+```
+
+```{r}
+ggplot(data = df, mapping = aes(x = distance_to_hydrology_manhattan, fill = Cover_Type)) + geom_density(alpha=0.3)
+```
+```{r}
+### feature creation
+ggpairs(df,
+        columns = c(1,4:5),
+        aes(color = Cover_Type,
+        alpha = 0.5)) 
+```
+```{r}
+ggpairs(df,
+        columns = c(1,23:24),
+        aes(color = Cover_Type,
+        alpha = 0.5)) 
+```
+Functionally speaking, the distributions produced by calculating the euclidean and Manhattan distance are similar. For the purposes of this analysis, euclidean distance will be implmented since it creates slightly more consistent separation between classes.
+
+```{r}
+ggpairs(df,
+        columns = c(6,9),
+        aes(color = Cover_Type,
+        alpha = 0.5)) 
+```
+```{r}
+ggpairs(df,
+        columns = c(1,6,9),
+        aes(color = Cover_Type,
+        alpha = 0.5)) 
+```
+```{r}
+df$distance_to_disturbance_min = pmin(df$Horizontal_Distance_To_Roadways, df$Horizontal_Distance_To_Fire_Points)
+df$distance_to_disturbance_avg = rowMeans(df[,c(6,9)])
+df$distance_to_disturbance_max = pmax(df$Horizontal_Distance_To_Roadways, df$Horizontal_Distance_To_Fire_Points)
+```
+
+```{r}
+ggpairs(df,
+        columns = c(1,25:27),
+        aes(color = Cover_Type,
+        alpha = 0.5)) 
+```
+
+Based on the pairplots and individual distributions of our created feature, the addition of any features based on Horizontal_Distance_To_Roadways and Horizontal_Distance_To_Fire_Points does not appear to be constructive enough to implement.
+
+```{r}
+
+df = df[,-c(4,5,24:27)]
+```
+
+```{r}
+write.csv(df,"data/covertype_preprocessed.csv", row.names = FALSE)
+```
+
+
+
+
+
+
