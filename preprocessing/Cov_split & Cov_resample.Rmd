@@ -61,6 +61,10 @@ df = df[,-highCors]
 ```
 
 ```{r}
+pairs(df_Cor)
+```
+
+```{r}
 # Split the data into training and testing sets (80% and 20%).
 ctraining <- createDataPartition(df$Cover_Type, p = 0.8, list = FALSE)
 
