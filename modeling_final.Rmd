@@ -1,0 +1,130 @@
+---
+title: "modeling_final"
+output: html_notebook
+---
+
+```{r setup, include=FALSE} 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+knitr::opts_chunk$set(fig.width=8, fig.height =8)
+knitr::opts_chunk$set(cache = TRUE)
+options(scipen=999)
+memory.limit(size=32000)
+```
+
+```{r}
+library(doParallel)
+cl <- makePSOCKcluster(4)
+registerDoParallel(cl)
+library(mlbench)
+library(nnet)
+library(MASS)
+library(kernlab)
+library(randomForest)
+library(xgboost)
+library(caret)
+```
+
+```{r}
+train = read.table("data/train_downsample.csv",
+                   sep = ",",
+                   header = TRUE)
+
+test = read.table("data/test.csv",
+                  sep = ",",
+                  header = TRUE)
+```
+
+```{r}
+train$Cover_Type <- as.factor(train$Cover_Type)
+test$Cover_Type <- as.factor(test$Cover_Type)
+levels(train$Cover_Type) <- c("Spruce.Fir", "Lodgepole.Pine", "Ponderosa.Pine", "Cottonwood.Willow", "Aspen", "Douglas.fir", "Krummholz")
+levels(test$Cover_Type) <- c("Spruce.Fir", "Lodgepole.Pine", "Ponderosa.Pine", "Cottonwood.Willow", "Aspen", "Douglas.fir", "Krummholz")
+```
+
+```{r}
+set.seed(7)
+ctrl = trainControl(summaryFunction = multiClassSummary,
+                    classProbs = TRUE)
+```
+
+```{r}
+lrFit = train(Cover_Type~., 
+              data = train,
+              method = "multinom",
+              verbose = FALSE,
+              preProc = c("center", "scale","BoxCox"))
+lrFit
+```
+```{r}
+lrFit_pred = predict(lrFit, test)
+postResample(pred = lrFit_pred, obs = test$Cover_Type)
+```
+
+
+```{r}
+ldaFit = train(Cover_Type~., 
+               data = train,
+               method = "lda",
+               preProc = c("center", "scale","BoxCox"))
+ldaFit
+```
+```{r}
+ldaFit_pred = predict(ldaFit, test)
+postResample(pred = ldaFit_pred, obs = test$Cover_Type)
+```
+
+```{r}
+svmFit = train(Cover_Type~., 
+               data = train,
+               method = "svmLinear",
+               preProc = c("center", "scale","BoxCox"))
+svmFit
+```
+```{r}
+svmFit_pred = predict(svmFit, test)
+postResample(pred = svmFit_pred, obs = test$Cover_Type)
+```
+
+```{r}
+nnFit = train(Cover_Type~., 
+               data = train,
+               method = "nnet",
+               preProc = c("center", "scale","BoxCox"))
+nnFit
+```
+```{r}
+nnFit_pred = predict(nnFit, test)
+postResample(pred = nnFit_pred, obs = test$Cover_Type)
+```
+
+```{r}
+rfFit = train(Cover_Type~., 
+              data = train,
+              method = "rf",
+              preProc = c("center", "scale","BoxCox"),
+              metric = "Accuracy",           
+              trControl = ctrl)
+rfFit
+```
+
+```{r}
+rfFit_pred = predict(rfFit, test)
+postResample(pred = rfFit_pred, obs = test$Cover_Type)
+```
+
+```{r}
+xgbFit = train(Cover_Type~., 
+               data = train,
+               method = "xgbTree",
+               preProc = c("center", "scale","BoxCox"),
+               metric = "Accuracy",
+               trControl = ctrl)
+xgbFit
+```
+
+```{r}
+xgbFit_pred = predict(xgbFit, test)
+postResample(pred = xgbFit_pred, obs = test$Cover_Type)
+```
+
+

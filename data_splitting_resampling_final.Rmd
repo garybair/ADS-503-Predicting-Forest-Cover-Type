@@ -29,12 +29,16 @@ test <- df[-ctraining, ]
 ```{r}
 train %>%count(Cover_Type, sort = TRUE) 
 ```
-
+```{r}
+### Class downsampling on training set.
+set.seed(7)
+write.csv(train,"data/train_no_resample.csv", row.names = FALSE)
+```
 
 ```{r}
 ### Class downsampling on training set.
 set.seed(7)
-train_down <- downSample(x = train[, -ncol(train)], 
+train_down <- downSample(x = train[, -20], 
                          y = train$Cover_Type,
                          yname = "Cover_Type")
 write.csv(train_down,"data/train_downsample.csv", row.names = FALSE)
@@ -43,7 +47,7 @@ write.csv(train_down,"data/train_downsample.csv", row.names = FALSE)
 ```{r}
 ### Class upsampling on training set.
 set.seed(7)
-train_up <- upSample(x = train[, -ncol(train)], 
+train_up <- upSample(x = train[, -20], 
                      y = train$Cover_Type,
                      yname = "Cover_Type")
 write.csv(train_up,"data/train_upsample.csv", row.names = FALSE)
@@ -55,7 +59,7 @@ set.seed(7)
 train_sm <- smote(Cover_Type~.,
                   data = train,
                   k = 3,
-                  perc.over = 25)
+                  perc.over = 10)
 write.csv(train_sm,"data/train_smote.csv", row.names = FALSE)
 ```
 

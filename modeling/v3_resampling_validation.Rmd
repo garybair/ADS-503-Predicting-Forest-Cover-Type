@@ -1,0 +1,87 @@
+---
+title: "v3_resampling_validation
+output: html_notebook
+---
+
+```{r setup, include=FALSE} 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+knitr::opts_chunk$set(fig.width=8, fig.height =8)
+knitr::opts_chunk$set(cache = TRUE)
+options(scipen=999)
+memory.limit(size=32000)
+```
+
+```{r}
+library(doParallel)
+#cl <- makePSOCKcluster(4)
+#registerDoParallel(cl)
+library(mlbench)
+library(nnet)
+library(pROC)
+library(MASS)
+library(pamr)
+library(rpart)
+library(mda)
+library(earth)
+library(randomForest)
+library(xgboost)
+library(caret)
+```
+
+```{r}
+test = read.table("../data/test.csv",
+                  sep = ",",
+                  header = TRUE)
+test$Cover_Type <- as.factor(test$Cover_Type)
+levels(test$Cover_Type) <- c("Spruce.Fir", "Lodgepole.Pine", "Ponderosa.Pine", "Cottonwood.Willow", "Aspen", "Douglas.fir", "Krummholz")
+```
+
+```{r}
+ctrl = trainControl(summaryFunction = multiClassSummary,
+                    classProbs = TRUE)
+```
+
+```{r}
+train = read.table("../data/train_downsample.csv",
+                   sep = ",",
+                   header = TRUE)
+train$Cover_Type <- as.factor(train$Cover_Type)
+levels(train$Cover_Type) <- c("Spruce.Fir", "Lodgepole.Pine", "Ponderosa.Pine", "Cottonwood.Willow", "Aspen", "Douglas.fir", "Krummholz")
+
+rfFit_down = train(Cover_Type~., 
+                   data = train,
+                   method = "rf",
+                   preProc = c("center", "scale","BoxCox"))
+rfFit_down
+```
+
+
+```{r}
+rfFit_down_pred = predict(rfFit_down, test)
+postResample(pred = rfFit_down_pred, obs = test$Cover_Type)
+```
+
+```{r}
+train = read.table("../data/train_smote.csv",
+                   sep = ",",
+                   header = TRUE)
+train$Cover_Type <- as.factor(train$Cover_Type)
+levels(train$Cover_Type) <- c("Spruce.Fir", "Lodgepole.Pine", "Ponderosa.Pine", "Cottonwood.Willow", "Aspen", "Douglas.fir", "Krummholz")
+
+rfFit_smote = train(Cover_Type~., 
+                   data = train,
+                   method = "rf",
+                   preProc = c("center", "scale","BoxCox"),
+                   verbose = TRUE)
+rfFit_smote
+```
+
+
+```{r}
+rfFit_smote_pred = predict(rfFit_smote, test)
+postResample(pred = rfFit_smote_pred, obs = test$Cover_Type)
+```
+
+
+
+
