@@ -13,6 +13,7 @@ Formulate goal as well as purpose of this predictive analytics task.
 library(ggplot2)
 library(dplyr)
 library(corrplot)
+library(caret)
 ```
 
 ```{r}
@@ -26,6 +27,11 @@ head(df)
 ```{r}
 # add statistics here
 summary(df)
+```
+
+```{r}
+# check for degenreate distributions
+zero_var <- nearZeroVar(df)
 ```
 
 ```{r}
