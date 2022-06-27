@@ -4,15 +4,17 @@ output: html_notebook
 ---
 
 ```{r}
+library(dplyr)
+library(data.table)
+```
+
+
+```{r}
 df = read.csv("../data/covertype.csv",
                 sep = ",")
 ```
 
 ```{r}
-df$Wilderness_Area1 = as.factor(df$Wilderness_Area1)
-df$Wilderness_Area2 = as.factor(df$Wilderness_Area2)
-df$Wilderness_Area3 = as.factor(df$Wilderness_Area3)
-df$Wilderness_Area4 = as.factor(df$Wilderness_Area4)
 df$Cover_Type = as.factor(df$Cover_Type)
 ```
 
@@ -21,8 +23,11 @@ str(df)
 ```
 
 ```{r}
-summary(df)
+num_sum = summary(df[1:10])
+write.csv(num_sum,"../data/numerical_summary_statistics.csv", row.names = FALSE)
+num_sum
 ```
+
 ### Elevation
 ```{r}
 ggplot(data = df, mapping = aes(x = Elevation, fill = Cover_Type)) + geom_density(alpha=0.3)

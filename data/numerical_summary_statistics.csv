@@ -1,0 +1,7 @@
+"  Elevation","    Aspect","    Slope","Horizontal_Distance_To_Hydrology","Vertical_Distance_To_Hydrology","Horizontal_Distance_To_Roadways","Hillshade_9am","Hillshade_Noon","Hillshade_3pm","Horizontal_Distance_To_Fire_Points"
+"Min.   :1859  ","Min.   :  0.0  ","Min.   : 0.0  ","Min.   :   0.0  ","Min.   :-173.00  ","Min.   :   0  ","Min.   :  0.0  ","Min.   :  0.0  ","Min.   :  0.0  ","Min.   :   0  "
+"1st Qu.:2809  ","1st Qu.: 58.0  ","1st Qu.: 9.0  ","1st Qu.: 108.0  ","1st Qu.:   7.00  ","1st Qu.:1106  ","1st Qu.:198.0  ","1st Qu.:213.0  ","1st Qu.:119.0  ","1st Qu.:1024  "
+"Median :2996  ","Median :127.0  ","Median :13.0  ","Median : 218.0  ","Median :  30.00  ","Median :1997  ","Median :218.0  ","Median :226.0  ","Median :143.0  ","Median :1710  "
+"Mean   :2959  ","Mean   :155.7  ","Mean   :14.1  ","Mean   : 269.4  ","Mean   :  46.42  ","Mean   :2350  ","Mean   :212.1  ","Mean   :223.3  ","Mean   :142.5  ","Mean   :1980  "
+"3rd Qu.:3163  ","3rd Qu.:260.0  ","3rd Qu.:18.0  ","3rd Qu.: 384.0  ","3rd Qu.:  69.00  ","3rd Qu.:3328  ","3rd Qu.:231.0  ","3rd Qu.:237.0  ","3rd Qu.:168.0  ","3rd Qu.:2550  "
+"Max.   :3858  ","Max.   :360.0  ","Max.   :66.0  ","Max.   :1397.0  ","Max.   : 601.00  ","Max.   :7117  ","Max.   :254.0  ","Max.   :254.0  ","Max.   :254.0  ","Max.   :7173  "

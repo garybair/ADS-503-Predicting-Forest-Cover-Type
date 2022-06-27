@@ -47,17 +47,18 @@ ctrl = trainControl(summaryFunction = multiClassSummary,
                     classProbs = TRUE)
 ```
 
+
 ```{r}
-lrFit = train(Cover_Type~., 
+pmrFit = train(Cover_Type~., 
               data = train,
               method = "multinom",
               verbose = FALSE,
               preProc = c("center", "scale","BoxCox"))
-lrFit
+pmrFit
 ```
 ```{r}
-lrFit_pred = predict(lrFit, test)
-postResample(pred = lrFit_pred, obs = test$Cover_Type)
+pmrFit_pred = predict(pmrFit, test)
+postResample(pred = pmrFit_pred, obs = test$Cover_Type)
 ```
 
 
